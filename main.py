@@ -19,8 +19,10 @@ class PRAWConfig:
 parser = argparse.ArgumentParser(description='Shred a reddit account.')
 parser.add_argument('username', metavar='username', type=str,
                     help='username to shred')
-parser.add_argument('--keep', metavar="keep", default="0s")
-parser.add_argument('--dry-run', action="store_true")
+parser.add_argument('-k', '--keep', metavar="keep", help='Keep submissions younger than the inputted time',
+                    default="0s")
+parser.add_argument('-s', '--skip-subreddits', action='append', help='Subreddits to skip', required=False)
+parser.add_argument('-d', '--dry-run', help='Do not actually delete submissions', action="store_true")
 
 args = parser.parse_args()
 
@@ -35,6 +37,13 @@ def check_submission_date(submission):
     now = time.time()
     cutoff = now - convert_to_seconds(args.keep)
     if submission.created_utc >= cutoff:
+        return True
+    else:
+        return False
+
+
+def check_submission_subreddit(submission):
+    if submission.subreddit.display_name in args.skip_subreddits:
         return True
     else:
         return False
@@ -62,12 +71,12 @@ reddit = praw.Reddit(
 
 for comment in tqdm((reddit.redditor(args.username).comments.new(limit=None)), desc="1000 most recent comments",
                     unit=" comments"):
-    if not check_submission_date(comment):
+    if not check_submission_date(comment) and not check_submission_subreddit(comment):
         if not args.dry_run:
             comment.delete()
 
 for post in tqdm((reddit.redditor(args.username).submissions.new(limit=None)), desc="1000 most recent posts",
                  unit=" posts"):
-    if not check_submission_date(post):
+    if not check_submission_date(post) and not check_submission_subreddit(post):
         if not args.dry_run:
             post.delete()
