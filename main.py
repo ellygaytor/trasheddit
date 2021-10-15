@@ -1,5 +1,6 @@
 import argparse
 import pickle
+import time
 from dataclasses import dataclass
 
 import praw
@@ -18,7 +19,26 @@ class PRAWConfig:
 parser = argparse.ArgumentParser(description='Shred a reddit account.')
 parser.add_argument('username', metavar='username', type=str,
                     help='username to shred')
+parser.add_argument('--keep', metavar="keep", default="0s")
+parser.add_argument('--dry-run', action="store_true")
+
 args = parser.parse_args()
+
+seconds_per_unit = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800, "M": 2629800, "y": 31557600}
+
+
+def convert_to_seconds(s):
+    return float(s[:-1]) * seconds_per_unit[s[-1]]
+
+
+def check_submission_date(submission):
+    now = time.time()
+    cutoff = now - convert_to_seconds(args.keep)
+    if submission.created_utc >= cutoff:
+        return True
+    else:
+        return False
+
 
 try:
     config = pickle.load(open(args.username + ".pickle", "rb"))
@@ -42,8 +62,12 @@ reddit = praw.Reddit(
 
 for comment in tqdm((reddit.redditor(args.username).comments.new(limit=None)), desc="1000 most recent comments",
                     unit=" comments"):
-    comment.delete()
+    if not check_submission_date(comment):
+        if not args.dry_run:
+            comment.delete()
 
 for post in tqdm((reddit.redditor(args.username).submissions.new(limit=None)), desc="1000 most recent posts",
                  unit=" posts"):
-    post.delete()
+    if not check_submission_date(post):
+        if not args.dry_run:
+            post.delete()
