@@ -29,4 +29,6 @@ Temporary Items
 venv
 .idea
 
+__pycache__
+
 *.pickle
