@@ -8,13 +8,15 @@ Shred your reddit comment and post history
 1. Download trasheddit: `git clone https://github.com/ellygaytor/trasheddit.git`
 2. Change into its directory: `cd trasheddit`
 3. Install its requirements: `pip3 install -r requirements.txt`
-4. Run trasheddit: `python3 main.py`
+4. Run trasheddit: `python3 main.py [username]`
 5. Follow the prompts to generate a configuration file
 
 Or, a one liner: 
 ```console
-git clone https://github.com/ellygaytor/trasheddit.git && cd trasheddit && pip3 install -y -r requirements.txt && python3 main.py
+git clone https://github.com/ellygaytor/trasheddit.git && cd trasheddit && pip3 install -y -r requirements.txt && python3 main.py [username]
 ```
+
+⚠️ Remember to change `[username]` to your Reddit username
 
 ### Options
 
