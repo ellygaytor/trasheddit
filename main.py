@@ -38,19 +38,13 @@ def check_submission_date(submission):
     """Check if the passed in submission is past the cutoff"""
     now = time.time()
     cutoff = now - convert_to_seconds(args.keep)
-    if submission.created_utc >= cutoff:
-        return True
-    else:
-        return False
+    return submission.created_utc >= cutoff
 
 
 def check_submission_subreddit(submission):
     """Check if the passed in submission is in a subreddit that should be skipped"""
     if args.skip_subreddits is not None:
-        if submission.subreddit.display_name in args.skip_subreddits:
-            return True
-        else:
-            return False
+        return submission.subreddit.display_name in args.skip_subreddits
 
 
 try:
