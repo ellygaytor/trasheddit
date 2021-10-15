@@ -1,5 +1,5 @@
 # trasheddit
-Shred your reddit comment and post history
+Shred your reddit comment and post history (x89/Shreddit replacement)
 
 ## Usage
 
