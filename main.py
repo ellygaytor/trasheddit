@@ -69,12 +69,10 @@ reddit = praw.Reddit(
 
 for comment in tqdm((reddit.redditor(args.username).comments.new(limit=None)), desc="1000 most recent comments",
                     unit=" comments"):
-    if not check_submission_date(comment) and not check_submission_subreddit(comment):
-        if not args.dry_run:
+    if not check_submission_date(comment) and not check_submission_subreddit(comment) and not args.dry_run:
             comment.delete()
 
 for post in tqdm((reddit.redditor(args.username).submissions.new(limit=None)), desc="1000 most recent posts",
                  unit=" posts"):
-    if not check_submission_date(post) and not check_submission_subreddit(post):
-        if not args.dry_run:
+    if not check_submission_date(post) and not check_submission_subreddit(post) and not args.dry_run:
             post.delete()
