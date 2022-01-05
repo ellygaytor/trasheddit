@@ -45,8 +45,7 @@ def check_submission_subreddit(submission):
     """Check if the passed in submission is in a subreddit that should be skipped"""
     if args.skip_subreddits is not None:
         return submission.subreddit.display_name in args.skip_subreddits
-    else:
-        return None
+    return None
 
 
 try:
