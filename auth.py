@@ -5,7 +5,7 @@ import json
 def auth(username):
 
     account = keyring.get_password("trasheddit", username)
-    if account == None:
+    if account is None:
         print(
             "No configuration found for '{}'. Please enter the PRAW configuration details now:".format(
                 username
