@@ -20,11 +20,12 @@ git clone https://github.com/ellygaytor/trasheddit.git && cd trasheddit && pip3 
 
 ### Options
 
-| Option                      | Function                                        | Usage                                                                      |
-|-----------------------------|-------------------------------------------------|----------------------------------------------------------------------------|
-| `-k` or `--keep`            | Keep submissions younger than the inputted time | `-k 3M` will keep submissions younger than 3 months                        |
-| `-s` or `--skip-subreddits` | Skip entered subreddits                         | `-s askreddit -s python` will skip submissions in r/askreddit and r/python |
-| `d` or `--dry-run`          | Do a dry run                                    | `-d` will not actually delete any submissions                              |
+| Option                      | Function                                                               | Usage                                                                      |
+|-----------------------------|------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `-k` or `--keep`            | Keep submissions younger than the inputted time                        | `-k 3M` will keep submissions younger than 3 months                        |
+| `-o` or `--overwrite`       | Overwrite submissions before deleting them. This is highly recommended.| `-o` will fill a submission with garbage data before deleting it           |
+| `-s` or `--skip-subreddits` | Skip entered subreddits                                                | `-s askreddit -s python` will skip submissions in r/askreddit and r/python |
+| `d` or `--dry-run`          | Do a dry run                                                           | `-d` will not actually delete any submissions                              |
 
 
 ### Configuring Credentials
