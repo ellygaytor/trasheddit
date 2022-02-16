@@ -1,21 +1,9 @@
 import argparse
-import pickle
 import time
-from dataclasses import dataclass
 import os
-
 import praw
 from tqdm import tqdm
-
-
-@dataclass
-class PRAWConfig:
-    """Class to store PRAW details"""
-
-    client_id: str
-    client_secret: str
-    username: str
-    password: str
+from auth import auth
 
 
 parser = argparse.ArgumentParser(description="Shred a reddit account.")
@@ -77,32 +65,13 @@ def check_submission_date(submission_to_check):
 def check_submission_subreddit(submission_to_check):
     """Check if the passed in submission is in a subreddit that should be skipped"""
     if args.skip_subreddits is not None:
-        return submission_to_check.subreddit.display_name in args.skip_subreddits
+        return (
+            submission_to_check.subreddit.display_name in args.skip_subreddits
+        )
     return None
 
 
-try:
-    config = pickle.load(open(args.username + ".pickle", "rb"))
-except (OSError, IOError) as e:
-    print(
-        "No configuration file found for '{}'. Please enter the PRAW configuration details now:".format(
-            args.username
-        )
-    )
-    client_id = str(input("client_id: "))
-    client_secret = str(input("client_secret: "))
-    username = args.username
-    password = str(input("password: "))
-    config = PRAWConfig(client_id, client_secret, username, password)
-    pickle.dump(config, open(args.username + ".pickle", "wb"))
-
-reddit = praw.Reddit(
-    client_id=config.client_id,
-    client_secret=config.client_secret,
-    user_agent="trasheddit",
-    username=config.username,
-    password=config.password,
-)
+reddit = auth(args.username)
 
 if args.overwrite:
     reddit.validate_on_submit = True
