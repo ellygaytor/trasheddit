@@ -67,17 +67,17 @@ def convert_to_seconds(s):
     return float(s[:-1]) * seconds_per_unit[s[-1]]
 
 
-def check_submission_date(submission):
+def check_submission_date(submission_to_check):
     """Check if the passed in submission is past the cutoff"""
     now = time.time()
     cutoff = now - convert_to_seconds(args.keep)
-    return submission.created_utc >= cutoff
+    return submission_to_check.created_utc >= cutoff
 
 
-def check_submission_subreddit(submission):
+def check_submission_subreddit(submission_to_check):
     """Check if the passed in submission is in a subreddit that should be skipped"""
     if args.skip_subreddits is not None:
-        return submission.subreddit.display_name in args.skip_subreddits
+        return submission_to_check.subreddit.display_name in args.skip_subreddits
     return None
 
 
